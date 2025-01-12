@@ -32,11 +32,12 @@ class SecurityDroneEnv(gym.Env):
         self.width = 640
         self.channels = 3
         self.terminated = False
+        self.truncated = False
         self.episode_number = 0
-        self.action_low = np.array([-1.0, -1.0], dtype=np.float16)
-        self.action_high = np.array([1.0, 1.0], dtype=np.float16)
-        self.action_space = Box(self.action_low, self.action_high, dtype=np.float16)
-        self.observation_space = Box(0, 255, shape=(self.channels,self.height, self.width), dtype=np.uint8)
+        self.action_low = np.array([-1.0, -1.0], dtype=np.float32)
+        self.action_high = np.array([1.0, 1.0], dtype=np.float32)
+        self.action_space = Box(self.action_low, self.action_high, dtype=np.float32)
+        self.observation_space = Box(0, 255, shape=(self.height, self.width, self.channels), dtype=np.uint8)
         self.current_step = 0
         self.ep_length = 1000
         self.spin_thread = threading.Thread(target=self.spin_node, daemon=True) #experimental
@@ -137,13 +138,14 @@ class SecurityDroneEnv(gym.Env):
         self.node.get_logger().info("image available")
         return image_obs
 
-    def reset(self):
+    def reset(self,seed=None, options=None):
         self.land()
         rclpy.spin_once(self.node, timeout_sec=0.1)
         self.episode_number += 1
         self.node.get_logger().info(f"Episode: {self.episode_number}")
         self.reset_simulation()
         self.terminated = False
+        self.truncated = False
         self.current_step = 0
         self.collision_count = 0
         self.collision_msg = None
@@ -156,7 +158,8 @@ class SecurityDroneEnv(gym.Env):
             self.y_start = 0.0
         self.takeoff()
         observation = self.get_observation()
-        return observation
+        info = {}
+        return observation, info
     
     def step(self, action):
         self.take_action(action)
@@ -165,11 +168,12 @@ class SecurityDroneEnv(gym.Env):
         reward = self.get_reward()
         self.current_step += 1
         if self.current_step >= self.ep_length:
-            self.terminated = True
+            self.truncated = True
         done = self.terminated
+        truncated = self.truncated
         info = {}
         self.node.get_logger().info(f"Step: {self.current_step}")
-        return observation, reward, done, info
+        return observation, reward, done, truncated, info
 
         
     def close(self):
