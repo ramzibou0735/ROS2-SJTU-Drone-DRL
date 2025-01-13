@@ -3,7 +3,7 @@
 This project is currently in its **prototype phase**. It is intended for use with the **SJTU Drone** package and serves as a foundation for future developments.
 
 ## Current Features
-- The project is only capable of performing **random actions** at this stage.
+- The project can now be trained using an SB3 PPO but at this stage the reward structure isn't good enough for it to learn anything consistently.
 
 ## Future Updates
 - This project will be updated **very frequently** to include new features and enhancements.
@@ -21,7 +21,7 @@ This project is currently in its **prototype phase**. It is intended for use wit
    ```
 4. With a second terminal run the test script:
     ```bash
-   python3 test_script.py
+   python3 sb3_train.py
    ```
 
 ## Disclaimer
