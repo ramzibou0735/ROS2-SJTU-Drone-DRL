@@ -3,14 +3,15 @@
 This project is currently in its **prototype phase**. It is intended for use with the **SJTU Drone** package and serves as a foundation for future developments.
 
 ## Current Features
-- The project can now be trained using an SB3 PPO but at this stage the reward structure isn't good enough for it to learn anything consistently.
+- The project can now be trained using an SB3 PPO but at this stage the reward structure is only good enough for the drone to learn not to run into obstacles after a few iterations.
 
 ## Future Updates
 - This project will be updated **very frequently** to include new features and enhancements.
 - Planned improvements include: 
   - Integration with reinforcment learning algorithms.
   - Enhanced target search and decision-making capabilities.
-  - Improved compatibility and functionality with the SJTU Drone package.
+  - Improved reward functions and parameters.
+  - better hyperparameters for the drone not to get stuck in local minimas.
 
 ## Usage
 1. Ensure you have the **SJTU Drone** package properly set up as described in the repository READMD.md https://github.com/NovoG93/sjtu_drone/tree/ros2 .
